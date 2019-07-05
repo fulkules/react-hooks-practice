@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import "./App.css";
-import { useFetch } from "./useFetch";
+import { Hello } from "./Hello";
 import { useForm } from "./useForm";
 
 const App = () => {
@@ -11,13 +11,11 @@ const App = () => {
     password: "",
     firstName: ""
   });
-  const [count, setCount] = useState(() =>
-    JSON.parse(localStorage.getItem("count"))
-  );
-  const { data, loading } = useFetch(`http://numbersapi.com/${count}/trivia`);
-  // http://numbersapi.com/73/trivia
 
-  // const [showHello, setShowHello] = useState(true);
+  const inputRef = useRef();
+  const hello = useRef(() => console.log("hello"));
+
+  const [showHello, setShowHello] = useState(true);
 
   // useEffect is new way to use lifecycle hooks
   // useEffect(() => {
@@ -40,15 +38,8 @@ const App = () => {
   //   console.log("mount2");
   // });
 
-  useEffect(() => {
-    localStorage.setItem("count", JSON.stringify(count));
-  }, [count]);
-
   return (
     <div className="App">
-      <div>{!data ? "Loading..." : data}</div>
-      <div>count: {count}</div>
-      <button onClick={() => setCount(c => c + 1)}>Increment</button>
       {/* <button
         onClick={() => {
           setCount(c => c + 1);
@@ -59,9 +50,10 @@ const App = () => {
       </button>
       <div>Count 1: {count}</div>
       <div>Count 2: {count2}</div> */}
-      {/* <button onClick={() => setShowHello(!showHello)}>Toggle</button>
-      {showHello && <Hello />} */}
+      <button onClick={() => setShowHello(!showHello)}>Toggle</button>
+      {showHello && <Hello />}
       <input
+        ref={inputRef}
         name="email"
         placeholder="email"
         type="text"
@@ -82,6 +74,14 @@ const App = () => {
         value={values.password}
         onChange={handleChange}
       />
+      <button
+        onClick={() => {
+          inputRef.current.focus();
+          hello.current();
+        }}
+      >
+        Focus
+      </button>
     </div>
   );
 };
