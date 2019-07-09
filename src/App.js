@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import "./App.css";
 import { Hello } from "./Hello";
 import { useForm } from "./useForm";
+import { useMeasure } from "./useMeasure";
 
 const App = () => {
   // const [count, setCount] = useState(10);
@@ -16,6 +17,12 @@ const App = () => {
   const hello = useRef(() => console.log("hello"));
 
   const [showHello, setShowHello] = useState(true);
+
+  const [rect, inputRef2] = useMeasure([]);
+
+  // useLayoutEffect(() => {
+  //   console.log(inputRef.current.getBoundingClientRect())
+  // }, [])
 
   // useEffect is new way to use lifecycle hooks
   // useEffect(() => {
@@ -61,6 +68,7 @@ const App = () => {
         onChange={handleChange}
       />
       <input
+        ref={inputRef2}
         name="firstName"
         placeholder="First Name"
         type="text"
