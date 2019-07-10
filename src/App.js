@@ -1,24 +1,24 @@
-import React, { useRef, useState } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useCallback, useState } from "react";
 import "./App.css";
 import { Hello } from "./Hello";
-import { useForm } from "./useForm";
-import { useMeasure } from "./useMeasure";
+import { Square } from "./Square";
 
 const App = () => {
   // const [count, setCount] = useState(10);
   // const [count2, setCount2] = useState(10);
-  const [values, handleChange] = useForm({
-    email: "",
-    password: "",
-    firstName: ""
-  });
+  // const [values, handleChange] = useForm({
+  //   email: "",
+  //   password: "",
+  //   firstName: ""
+  // });
 
-  const inputRef = useRef();
-  const hello = useRef(() => console.log("hello"));
+  // const inputRef = useRef();
+  // const hello = useRef(() => console.log("hello"));
 
-  const [showHello, setShowHello] = useState(true);
+  // const [showHello, setShowHello] = useState(true);
 
-  const [rect, inputRef2] = useMeasure([]);
+  // const [rect, inputRef2] = useMeasure([]);
 
   // useLayoutEffect(() => {
   //   console.log(inputRef.current.getBoundingClientRect())
@@ -45,9 +45,10 @@ const App = () => {
   //   console.log("mount2");
   // });
 
-  return (
-    <div className="App">
-      {/* <button
+  // return (
+  //   <div className="App">
+
+  /* <button
         onClick={() => {
           setCount(c => c + 1);
           setCount2(c => c + 2);
@@ -56,8 +57,9 @@ const App = () => {
         +
       </button>
       <div>Count 1: {count}</div>
-      <div>Count 2: {count2}</div> */}
-      <button onClick={() => setShowHello(!showHello)}>Toggle</button>
+      <div>Count 2: {count2}</div> */
+
+  /* <button onClick={() => setShowHello(!showHello)}>Toggle</button>
       {showHello && <Hello />}
       <input
         ref={inputRef}
@@ -87,9 +89,31 @@ const App = () => {
           inputRef.current.focus();
           hello.current();
         }}
-      >
-        Focus
+      > */
+
+  /* Focus
       </button>
+    </div>
+  ); */
+
+  /* ---------------- UseCallback ------------------ */
+
+  const [count, setCount] = useState(0);
+  const favNums = [3, 7, 11, 13, 33];
+  const increment = useCallback(
+    n => {
+      setCount(c => c + n);
+    },
+    [setCount]
+  );
+
+  return (
+    <div>
+      <Hello increment={increment} />
+      <div>Count: {count}</div>
+      {favNums.map(n => {
+        return <Square increment={increment} n={n} key={n} />;
+      })}
     </div>
   );
 };
