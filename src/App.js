@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import "./App.css";
 import { useFetch } from "./useFetch";
 
-const computeLongestWord = (arr) => {
+const computeLongestWord = arr => {
   if (!arr) {
     return [];
   }
@@ -143,13 +143,13 @@ const App = () => {
     "https://raw.githubusercontent.com/ajzbc/kanye.rest/master/quotes.json"
   );
 
-  const longestWord = useMemo(() => computeLongestWord(data), [data, computeLongestWord])
+  const longestWord = useMemo(() => computeLongestWord(data), [data]);
 
   return (
     <div>
       <div>count: {count}</div>
       <button onClick={() => setCount(count + 1)}>Increment</button>
-      <div>{computeLongestWord(data)}</div>
+      <div>{longestWord}</div>
     </div>
   );
 };
