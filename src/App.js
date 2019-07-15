@@ -1,28 +1,82 @@
 /* eslint-disable no-unused-vars */
-import React, { useMemo, useState } from "react";
+import React, { useReducer, useState } from "react";
 import "./App.css";
-import { useFetch } from "./useFetch";
 
-const computeLongestWord = arr => {
-  if (!arr) {
-    return [];
+/*-----------------useMemo------------------*/
+// const computeLongestWord = arr => {
+//   if (!arr) {
+//     return [];
+//   }
+//   console.log("Computing Longest Word");
+
+//   let longestWord = "";
+
+//   JSON.parse(arr).forEach(sentence =>
+//     sentence.split(" ").forEach(word => {
+//       if (word.length > longestWord.length) {
+//         longestWord = word;
+//       }
+//     })
+//   );
+
+//   return longestWord;
+// };
+
+/*------------------useReducer------------------*/
+// for complex nested objects & mutations look into useImmer on NPM/Github
+function reducer(state, action) {
+  switch (action.type) {
+    case "add-todo":
+      return {
+        todos: [...state.todos, { text: action.text, completed: false }],
+        todoCount: state.todoCount + 1
+      };
+    case "toggle-todo":
+      return {
+        todos: state.todos.map((t, i) =>
+          i === action.i ? { ...t, completed: !t.completed } : t
+        ),
+        todoCount: state.todoCount
+      };
+    default:
+      return state;
   }
-  console.log("Computing Longest Word");
-
-  let longestWord = "";
-
-  JSON.parse(arr).forEach(sentence =>
-    sentence.split(" ").forEach(word => {
-      if (word.length > longestWord.length) {
-        longestWord = word;
-      }
-    })
-  );
-
-  return longestWord;
-};
+}
 
 const App = () => {
+  const [{ todos, todoCount }, dispatch] = useReducer(reducer, {
+    todos: [],
+    todoCount: 0
+  });
+  const [text, setText] = useState("");
+
+  return (
+    <div>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          dispatch({ type: "add-todo", text });
+          setText("");
+        }}
+      >
+        <input value={text} onChange={e => setText(e.target.value)} />
+      </form>
+      <div>number of todos: {todoCount}</div>
+      {todos.map((t, i) => (
+        <div
+          key={t.text}
+          onClick={() => dispatch({ type: "toggle-todo", i })}
+          style={{
+            textDecoration: t.completed ? "line-through" : "",
+            cursor: "pointer"
+          }}
+        >
+          {t.text}
+        </div>
+      ))}
+    </div>
+  );
+
   // const [count, setCount] = useState(10);
   // const [count2, setCount2] = useState(10);
   // const [values, handleChange] = useForm({
@@ -138,20 +192,20 @@ const App = () => {
 
   /*----------------------- UseMemo ----------------------*/
 
-  const [count, setCount] = useState(0);
-  const { data } = useFetch(
-    "https://raw.githubusercontent.com/ajzbc/kanye.rest/master/quotes.json"
-  );
+  // const [count, setCount] = useState(0);
+  // const { data } = useFetch(
+  //   "https://raw.githubusercontent.com/ajzbc/kanye.rest/master/quotes.json"
+  // );
 
-  const longestWord = useMemo(() => computeLongestWord(data), [data]);
+  // const longestWord = useMemo(() => computeLongestWord(data), [data]);
 
-  return (
-    <div>
-      <div>count: {count}</div>
-      <button onClick={() => setCount(count + 1)}>Increment</button>
-      <div>{longestWord}</div>
-    </div>
-  );
+  // return (
+  //   <div>
+  //     <div>count: {count}</div>
+  //     <button onClick={() => setCount(count + 1)}>Increment</button>
+  //     <div>{longestWord}</div>
+  //   </div>
+  // );
 };
 
 export default App;
